@@ -1,0 +1,27 @@
+version: "3"
+services:
+  api:
+    build: ./docker/api
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app:cached
+    tty: true
+    command: /bin/sh -c "cd server && go mod tidy && go build && go run main.go"
+      /bin/sh -c "while sleep 1000; do :; done"
+      /bin/bash
+    networks:
+      - test_network
+
+  client:
+    build: ./docker/web
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app:cached
+    tty: true
+    networks:
+      - test_network
+networks:
+  test_network:
+    external: true
